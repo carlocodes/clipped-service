@@ -28,6 +28,7 @@ public class Buddy {
     public void prePersist() {
         this.createdDateTime = LocalDateTime.now();
     }
+
     @PreUpdate
     public void preUpdate() {
         this.acceptedDateTime = LocalDateTime.now();
