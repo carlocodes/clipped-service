@@ -62,8 +62,26 @@ public class ClipService {
 
             return ClipMapper.INSTANCE.mapToDto(editClip(clip, clipDto));
         } catch (ClippedException e) {
-            throw new ClippedException(String.format("Edit clip for user with id: %d failed due to %s",
-                    clipDto.getUser().getId(), e.getMessage()), e);
+            throw new ClippedException(String.format("Edit clip with id: %d failed due to %s",
+                    clipDto.getId(), e.getMessage()), e);
+        }
+    }
+
+    public void deleteClip(ClipDto clipDto) throws ClippedException {
+        try {
+            long clipId = clipDto.getId();
+            long userId = clipDto.getUser().getId();
+
+            Clip clip = clipRepository.findById(clipId)
+                    .orElseThrow(() -> new ClippedException(String.format("Clip with id: %d does not exist!", clipId)));
+
+            if (!clip.getUser().getId().equals(userId))
+                throw new ClippedException(String.format("User with id: %d is not allowed to delete the clip with id: %d!", userId, clipId));
+
+            clipRepository.delete(clip);
+        } catch (ClippedException e) {
+            throw new ClippedException(String.format("Delete clip with id: %d failed due to %s",
+                    clipDto.getId(), e.getMessage()), e);
         }
     }
 
