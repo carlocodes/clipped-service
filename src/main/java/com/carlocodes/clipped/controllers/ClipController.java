@@ -5,6 +5,7 @@ import com.carlocodes.clipped.exceptions.ClippedException;
 import com.carlocodes.clipped.services.ClipService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,5 +22,10 @@ public class ClipController {
     @PostMapping("/create-clip")
     public ResponseEntity<ClipDto> createClip(@RequestBody ClipDto clipDto) throws ClippedException {
         return ResponseEntity.ok(clipService.createClip(clipDto));
+    }
+
+    @PutMapping("/edit-clip")
+    public ResponseEntity<ClipDto> editClip(@RequestBody ClipDto clipDto) throws ClippedException {
+        return ResponseEntity.ok(clipService.editClip(clipDto));
     }
 }

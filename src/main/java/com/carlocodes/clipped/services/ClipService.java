@@ -44,7 +44,25 @@ public class ClipService {
 
             return ClipMapper.INSTANCE.mapToDto(saveClip(clipDto, user, game));
         } catch (ClippedException e) {
-            throw new ClippedException(String.format("Create clip for User with id: %d failed due to %s",
+            throw new ClippedException(String.format("Create clip for user with id: %d failed due to %s",
+                    clipDto.getUser().getId(), e.getMessage()), e);
+        }
+    }
+
+    public ClipDto editClip(ClipDto clipDto) throws ClippedException {
+        try {
+            long clipId = clipDto.getId();
+            long userId = clipDto.getUser().getId();
+
+            Clip clip = clipRepository.findById(clipId)
+                    .orElseThrow(() -> new ClippedException(String.format("Clip with id: %d does not exist!", clipId)));
+
+            if (!clip.getUser().getId().equals(userId))
+                throw new ClippedException(String.format("User with id: %d is not allowed to edit the clip with id: %d!", userId, clipId));
+
+            return ClipMapper.INSTANCE.mapToDto(editClip(clip, clipDto));
+        } catch (ClippedException e) {
+            throw new ClippedException(String.format("Edit clip for user with id: %d failed due to %s",
                     clipDto.getUser().getId(), e.getMessage()), e);
         }
     }
@@ -56,6 +74,12 @@ public class ClipService {
         clip.setMessage(clipDto.getMessage());
         clip.setUser(user);
         clip.setGame(game);
+
+        return clipRepository.save(clip);
+    }
+
+    private Clip editClip(Clip clip, ClipDto clipDto) {
+        clip.setMessage(clipDto.getMessage());
 
         return clipRepository.save(clip);
     }
