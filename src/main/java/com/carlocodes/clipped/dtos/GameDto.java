@@ -1,15 +1,8 @@
-package com.carlocodes.clipped.entities;
+package com.carlocodes.clipped.dtos;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.time.LocalDateTime;
 
-@Entity
-public class Game {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class GameDto {
     private Integer id;
     private String name;
     private LocalDateTime createdDateTime;
@@ -40,7 +33,7 @@ public class Game {
 
     @Override
     public String toString() {
-        return "Game{" +
+        return "GameDto{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", createdDateTime=" + createdDateTime +
