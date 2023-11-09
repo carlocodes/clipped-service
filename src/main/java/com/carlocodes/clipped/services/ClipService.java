@@ -9,6 +9,7 @@ import com.carlocodes.clipped.mappers.ClipMapper;
 import com.carlocodes.clipped.repositories.ClipRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -82,6 +83,18 @@ public class ClipService {
         } catch (ClippedException e) {
             throw new ClippedException(String.format("Delete clip with id: %d failed due to %s",
                     clipDto.getId(), e.getMessage()), e);
+        }
+    }
+
+    public List<ClipDto> getClips(long userId) throws ClippedException {
+        try {
+            User user = userService.findById(userId)
+                    .orElseThrow(() -> new ClippedException(String.format("User with id: %d does not exist!", userId)));
+
+            return ClipMapper.INSTANCE.mapToDtos(clipRepository.findByUser(user));
+        } catch (ClippedException e) {
+            throw new ClippedException(String.format("Get clips for user with id: %d failed due to %s",
+                    userId, e.getMessage()), e);
         }
     }
 
