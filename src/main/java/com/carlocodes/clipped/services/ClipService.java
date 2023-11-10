@@ -98,6 +98,21 @@ public class ClipService {
         }
     }
 
+    public List<ClipDto> forYou(long userId) throws ClippedException {
+        try {
+            User user = userService.findById(userId)
+                    .orElseThrow(() -> new ClippedException(String.format("User with id: %d does not exist!", userId)));
+
+            // TODO: Update this return
+            // TODO: Add a new requirement to distinguish how a clip gets popular
+            // What is the criteria for a clip to get tagged as popular?
+            return ClipMapper.INSTANCE.mapToDtos(clipRepository.findByUser(user));
+        } catch (ClippedException e) {
+            throw new ClippedException(String.format("For you for user with id: %d failed due to %s",
+                    userId, e.getMessage()), e);
+        }
+    }
+
     private Clip saveClip(ClipDto clipDto, User user, Game game) {
         Clip clip = new Clip();
 

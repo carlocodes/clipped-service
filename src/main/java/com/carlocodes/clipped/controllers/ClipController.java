@@ -44,4 +44,12 @@ public class ClipController {
     public ResponseEntity<List<ClipDto>> getClips(@PathVariable long id) throws ClippedException {
         return ResponseEntity.ok(clipService.getClips(id));
     }
+
+    // TODO: Maybe enhance endpoint by taking in user/{id}
+    // And check user's likes/watch time on certain clips/games
+    // To enhance this endpoints algorithm and usability
+    @GetMapping("/for-you/user/{id}")
+    public ResponseEntity<List<ClipDto>> forYou(@PathVariable long id) throws ClippedException {
+        return ResponseEntity.ok(clipService.forYou(id));
+    }
 }
