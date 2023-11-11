@@ -10,6 +10,8 @@ import com.carlocodes.clipped.mappers.ClipMapper;
 import com.carlocodes.clipped.repositories.ClipRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -115,6 +117,19 @@ public class ClipService {
         } catch (ClippedException e) {
             throw new ClippedException(String.format("Like clip with id: %d for user with id: %d failed due to %s",
                     likeDto.getClipId(), likeDto.getUserId(), e.getMessage()), e);
+        }
+    }
+
+    public LinkedHashSet<ClipDto> forYou(long userId) throws ClippedException {
+        try {
+            User user = userService.findById(userId)
+                    .orElseThrow(() -> new ClippedException(String.format("User with id: %d does not exist!", userId)));
+
+            // TODO: Update this return by knowing what user likes to see
+            return ClipMapper.INSTANCE.mapToDtos(clipRepository.findByCreatedDateTimeGreaterThanEqualOrderByLikesDescCreatedDateTimeDesc(LocalDateTime.now().minusHours(2)));
+        } catch (ClippedException e) {
+            throw new ClippedException(String.format("For you for user with id: %d failed due to %s",
+                    userId, e.getMessage()), e);
         }
     }
 
