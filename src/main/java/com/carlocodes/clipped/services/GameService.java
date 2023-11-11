@@ -41,7 +41,7 @@ public class GameService {
             user.setGames(watchedGames);
             userService.save(user);
         } catch (ClippedException e) {
-            throw new ClippedException(String.format("Watch game with id: %d by user with id: %d failed due to %s",
+            throw new ClippedException(String.format("Watch game with id: %d for user with id: %d failed due to %s",
                     gameActivityDto.getGameId(), gameActivityDto.getUserId(), e.getMessage()), e);
         }
     }
