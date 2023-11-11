@@ -1,6 +1,7 @@
 package com.carlocodes.clipped.services;
 
 import com.carlocodes.clipped.dtos.ClipDto;
+import com.carlocodes.clipped.dtos.LikeDto;
 import com.carlocodes.clipped.entities.Clip;
 import com.carlocodes.clipped.entities.Game;
 import com.carlocodes.clipped.entities.User;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 public class ClipService {
@@ -98,6 +100,24 @@ public class ClipService {
         }
     }
 
+    public void likeClip(LikeDto likeDto) throws ClippedException {
+        try {
+            long clipId = likeDto.getClipId();
+            long userId = likeDto.getUserId();
+
+            Clip clip = clipRepository.findById(clipId)
+                    .orElseThrow(() -> new ClippedException(String.format("Clip with id: %d does not exist!", clipId)));
+
+            User user = userService.findById(userId)
+                    .orElseThrow(() -> new ClippedException(String.format("User with id: %d does not exist!", userId)));
+
+            saveLike(clip, user);
+        } catch (ClippedException e) {
+            throw new ClippedException(String.format("Like clip with id: %d for user with id: %d failed due to %s",
+                    likeDto.getClipId(), likeDto.getUserId(), e.getMessage()), e);
+        }
+    }
+
     private Clip saveClip(ClipDto clipDto, User user, Game game) {
         Clip clip = new Clip();
 
@@ -113,5 +133,11 @@ public class ClipService {
         clip.setMessage(clipDto.getMessage());
 
         return clipRepository.save(clip);
+    }
+
+    private void saveLike(Clip clip, User user) {
+        Set<User> likes = clip.getLikes();
+        likes.add(user);
+        clipRepository.save(clip);
     }
 }
