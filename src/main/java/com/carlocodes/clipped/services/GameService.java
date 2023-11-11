@@ -22,23 +22,28 @@ public class GameService {
     }
 
     public void watchGame(GameActivityDto gameActivityDto) throws ClippedException {
-        long userId = gameActivityDto.getUserId();
-        int gameId = gameActivityDto.getGameId();
+        try {
+            long userId = gameActivityDto.getUserId();
+            int gameId = gameActivityDto.getGameId();
 
-        User user = userService.findById(userId)
-                .orElseThrow(() -> new ClippedException(String.format("User with id: %d does not exist!", userId)));
+            User user = userService.findById(userId)
+                    .orElseThrow(() -> new ClippedException(String.format("User with id: %d does not exist!", userId)));
 
-        Game game = gameRepository.findById(gameId)
-                .orElseThrow(() -> new ClippedException(String.format("Game with id: %d does not exist!", gameId)));
+            Game game = gameRepository.findById(gameId)
+                    .orElseThrow(() -> new ClippedException(String.format("Game with id: %d does not exist!", gameId)));
 
-        Set<Game> watchedGames = user.getGames();
+            Set<Game> watchedGames = user.getGames();
 
-        if (watchedGames.contains(game))
-            throw new ClippedException(String.format("User with id: %d is already watching game with id: %d!", userId, gameId));
+            if (watchedGames.contains(game))
+                throw new ClippedException(String.format("User with id: %d is already watching game with id: %d!", userId, gameId));
 
-        watchedGames.add(game);
-        user.setGames(watchedGames);
-        userService.save(user);
+            watchedGames.add(game);
+            user.setGames(watchedGames);
+            userService.save(user);
+        } catch (ClippedException e) {
+            throw new ClippedException(String.format("Watch game with id: %d by user with id: %d failed due to %s",
+                    gameActivityDto.getGameId(), gameActivityDto.getUserId(), e.getMessage()), e);
+        }
     }
 
     public Optional<Game> findById(int id) {
