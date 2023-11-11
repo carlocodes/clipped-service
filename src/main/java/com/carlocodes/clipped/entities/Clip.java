@@ -5,10 +5,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 public class Clip {
@@ -23,6 +26,11 @@ public class Clip {
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
+    @ManyToMany
+    @JoinTable(name = "likes",
+            joinColumns = @JoinColumn(name = "clip_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> likes;
     private LocalDateTime createdDateTime;
     private LocalDateTime updatedDateTime;
 
@@ -76,6 +84,14 @@ public class Clip {
         this.game = game;
     }
 
+    public Set<User> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<User> likes) {
+        this.likes = likes;
+    }
+
     public LocalDateTime getCreatedDateTime() {
         return createdDateTime;
     }
@@ -100,6 +116,7 @@ public class Clip {
                 ", message='" + message + '\'' +
                 ", user=" + user +
                 ", game=" + game +
+                ", likes=" + likes +
                 ", createdDateTime=" + createdDateTime +
                 ", updatedDateTime=" + updatedDateTime +
                 '}';
