@@ -1,6 +1,7 @@
 package com.carlocodes.clipped.controllers;
 
 import com.carlocodes.clipped.dtos.ClipDto;
+import com.carlocodes.clipped.dtos.LikeDto;
 import com.carlocodes.clipped.exceptions.ClippedException;
 import com.carlocodes.clipped.services.ClipService;
 import org.springframework.http.ResponseEntity;
@@ -43,5 +44,11 @@ public class ClipController {
     @GetMapping("/get-clips/user/{id}")
     public ResponseEntity<List<ClipDto>> getClips(@PathVariable long id) throws ClippedException {
         return ResponseEntity.ok(clipService.getClips(id));
+    }
+
+    @PostMapping("/like-clip")
+    public ResponseEntity<String> likeClip(@RequestBody LikeDto likeDto) throws ClippedException {
+        clipService.likeClip(likeDto);
+        return ResponseEntity.ok("Clip liked!");
     }
 }
