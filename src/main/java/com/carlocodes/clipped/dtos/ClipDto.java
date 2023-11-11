@@ -1,6 +1,7 @@
 package com.carlocodes.clipped.dtos;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 public class ClipDto {
     private Long id;
@@ -8,6 +9,7 @@ public class ClipDto {
     private String message;
     private UserDto user;
     private GameDto game;
+    private Set<UserDto> likes;
     private LocalDateTime createdDateTime;
     private LocalDateTime updatedDateTime;
 
@@ -51,6 +53,14 @@ public class ClipDto {
         this.game = game;
     }
 
+    public Set<UserDto> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<UserDto> likes) {
+        this.likes = likes;
+    }
+
     public LocalDateTime getCreatedDateTime() {
         return createdDateTime;
     }
@@ -75,6 +85,7 @@ public class ClipDto {
                 ", message='" + message + '\'' +
                 ", user=" + user +
                 ", game=" + game +
+                ", likes=" + likes +
                 ", createdDateTime=" + createdDateTime +
                 ", updatedDateTime=" + updatedDateTime +
                 '}';

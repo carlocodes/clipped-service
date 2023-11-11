@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 
 @RestController
@@ -56,7 +57,7 @@ public class ClipController {
     // And check user's likes/watch time on certain clips/games
     // To enhance this endpoints algorithm and usability
     @GetMapping("/for-you/user/{id}")
-    public ResponseEntity<List<ClipDto>> forYou(@PathVariable long id) throws ClippedException {
+    public ResponseEntity<LinkedHashSet<ClipDto>> forYou(@PathVariable long id) throws ClippedException {
         return ResponseEntity.ok(clipService.forYou(id));
     }
 }
