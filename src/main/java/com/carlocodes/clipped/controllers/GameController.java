@@ -7,12 +7,14 @@ import com.carlocodes.clipped.services.GameService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/game")
@@ -39,5 +41,10 @@ public class GameController {
     @GetMapping("/get-games")
     public ResponseEntity<List<GameDto>> getGames() {
         return ResponseEntity.ok(gameService.getGames());
+    }
+
+    @GetMapping("/get-watched-games/user/{id}")
+    public ResponseEntity<Set<GameDto>> getWatchedGames(@PathVariable long id) throws ClippedException {
+        return ResponseEntity.ok(gameService.getWatchedGames(id));
     }
 }

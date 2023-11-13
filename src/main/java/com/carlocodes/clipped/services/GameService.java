@@ -78,6 +78,18 @@ public class GameService {
         return GameMapper.INSTANCE.mapToDtos(gameRepository.findAll());
     }
 
+    public Set<GameDto> getWatchedGames(long userId) throws ClippedException {
+        try {
+            User user = userService.findById(userId)
+                    .orElseThrow(() -> new ClippedException(String.format("User with id: %d does not exist!", userId)));
+
+            return GameMapper.INSTANCE.mapToDtos(user.getGames());
+        } catch (ClippedException e) {
+            throw new ClippedException(String.format("Get watched games for user with id: %d failed due to %s",
+                    userId, e.getMessage()), e);
+        }
+    }
+
     public Optional<Game> findById(int id) {
         return gameRepository.findById(id);
     }
