@@ -60,4 +60,10 @@ public class ClipController {
     public ResponseEntity<LinkedHashSet<ClipDto>> forYou(@PathVariable long id) throws ClippedException {
         return ResponseEntity.ok(clipService.forYou(id));
     }
+
+    // TODO: Revisit
+    @GetMapping("/watching/user/{id}")
+    public ResponseEntity<LinkedHashSet<ClipDto>> watching(@PathVariable long id) throws ClippedException {
+        return ResponseEntity.ok(clipService.watching(id));
+    }
 }
