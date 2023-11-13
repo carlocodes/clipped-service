@@ -1,12 +1,15 @@
 package com.carlocodes.clipped.services;
 
 import com.carlocodes.clipped.dtos.GameActivityDto;
+import com.carlocodes.clipped.dtos.GameDto;
 import com.carlocodes.clipped.entities.Game;
 import com.carlocodes.clipped.entities.User;
 import com.carlocodes.clipped.exceptions.ClippedException;
+import com.carlocodes.clipped.mappers.GameMapper;
 import com.carlocodes.clipped.repositories.GameRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -69,6 +72,10 @@ public class GameService {
             throw new ClippedException(String.format("Unwatch game with id: %d for user with id: %d failed due to %s",
                     gameActivityDto.getGameId(), gameActivityDto.getUserId(), e.getMessage()), e);
         }
+    }
+
+    public List<GameDto> getGames() {
+        return GameMapper.INSTANCE.mapToDtos(gameRepository.findAll());
     }
 
     public Optional<Game> findById(int id) {
