@@ -15,6 +15,8 @@ public interface ClipMapper {
 
     @Mapping(target = "likes", source = "likes")
     ClipDto mapToDto(Clip clip);
+
     List<ClipDto> mapToDtos(List<Clip> clips);
+
     LinkedHashSet<ClipDto> mapToDtos(LinkedHashSet<Clip> clips);
 }
