@@ -126,9 +126,29 @@ public class ClipService {
                     .orElseThrow(() -> new ClippedException(String.format("User with id: %d does not exist!", userId)));
 
             // TODO: Update this return by knowing what user likes to see
+            // TODO: Revisit this query
             return ClipMapper.INSTANCE.mapToDtos(clipRepository.findByCreatedDateTimeGreaterThanEqualOrderByLikesDescCreatedDateTimeDesc(LocalDateTime.now().minusHours(2)));
         } catch (ClippedException e) {
             throw new ClippedException(String.format("For you for user with id: %d failed due to %s",
+                    userId, e.getMessage()), e);
+        }
+    }
+
+    public LinkedHashSet<ClipDto> watching(long userId) throws ClippedException {
+        try {
+            User user = userService.findById(userId)
+                    .orElseThrow(() -> new ClippedException(String.format("User with id: %d does not exist!", userId)));
+
+            Set<Game> watchedGames = user.getGames();
+
+            if (watchedGames.isEmpty())
+                throw new ClippedException(String.format("User with id: %d is not watching any games!", userId));
+
+            // TODO: Revisit this query
+            // This query does not order the highest number of likes
+            return ClipMapper.INSTANCE.mapToDtos(clipRepository.watching(LocalDateTime.now().minusHours(2), watchedGames));
+        } catch (ClippedException e) {
+            throw new ClippedException(String.format("Watching for user with id: %d failed due to %s",
                     userId, e.getMessage()), e);
         }
     }
