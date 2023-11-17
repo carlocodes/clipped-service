@@ -30,4 +30,10 @@ public class BuddyController {
         buddyService.acceptBuddyRequest(buddyRequestDto);
         return ResponseEntity.ok("Buddy request accepted!");
     }
+
+    @PutMapping("/decline-buddy-request")
+    public ResponseEntity<String> declineBuddyRequest(@RequestBody BuddyRequestDto buddyRequestDto) throws ClippedException {
+        buddyService.declineBuddyRequest(buddyRequestDto);
+        return ResponseEntity.ok("Buddy request declined!");
+    }
 }

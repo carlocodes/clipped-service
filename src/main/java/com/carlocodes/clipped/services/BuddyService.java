@@ -69,6 +69,31 @@ public class BuddyService {
         }
     }
 
+    public void declineBuddyRequest(BuddyRequestDto buddyRequestDto) throws ClippedException {
+        try {
+            long senderId = buddyRequestDto.getSenderId();
+            long receiverId = buddyRequestDto.getReceiverId();
+
+            User sender = userService.findById(senderId).orElseThrow(() ->
+                    new ClippedException(String.format("Sender id: %d does not exist!", senderId)));
+            User receiver = userService.findById(receiverId).orElseThrow(() ->
+                    new ClippedException(String.format("Receiver id: %d does not exist!", receiverId)));
+
+            if (buddyRepository.existsBySenderAndReceiverAndAcceptedIsTrue(sender, receiver) ||
+                    buddyRepository.existsBySenderAndReceiverAndAcceptedIsTrue(receiver, sender))
+                throw new ClippedException("Already buddies!");
+
+            Buddy buddy = buddyRepository.findBySenderAndReceiverAndAcceptedIsNull(sender, receiver).orElseThrow(() ->
+                    new ClippedException("Buddy request does not exist!"));
+
+            buddy.setAccepted(false);
+            buddyRepository.save(buddy);
+        } catch (ClippedException e) {
+            throw new ClippedException(String.format("Decline buddy request from sender with id: %d to receiver with id: %d failed due to %s",
+                    buddyRequestDto.getSenderId(), buddyRequestDto.getReceiverId(), e.getMessage()), e);
+        }
+    }
+
     private void saveBuddyRequest(User sender, User receiver) {
         Buddy buddy = new Buddy();
 
