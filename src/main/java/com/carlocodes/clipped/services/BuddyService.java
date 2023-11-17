@@ -1,13 +1,16 @@
 package com.carlocodes.clipped.services;
 
+import com.carlocodes.clipped.dtos.BuddyDto;
 import com.carlocodes.clipped.dtos.BuddyRequestDto;
 import com.carlocodes.clipped.entities.Buddy;
 import com.carlocodes.clipped.entities.User;
 import com.carlocodes.clipped.exceptions.ClippedException;
+import com.carlocodes.clipped.mappers.BuddyMapper;
 import com.carlocodes.clipped.repositories.BuddyRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class BuddyService {
@@ -25,10 +28,10 @@ public class BuddyService {
             long senderId = buddyRequestDto.getSenderId();
             long receiverId = buddyRequestDto.getReceiverId();
 
-            User sender = userService.findById(senderId).orElseThrow(() ->
-                    new ClippedException(String.format("Sender with id: %d does not exist!", senderId)));
-            User receiver = userService.findById(receiverId).orElseThrow(() ->
-                    new ClippedException(String.format("Receiver with id: %d does not exist!", receiverId)));
+            User sender = userService.findById(senderId)
+                    .orElseThrow(() -> new ClippedException(String.format("Sender with id: %d does not exist!", senderId)));
+            User receiver = userService.findById(receiverId)
+                    .orElseThrow(() -> new ClippedException(String.format("Receiver with id: %d does not exist!", receiverId)));
 
             if (buddyRepository.existsBySenderAndReceiverAndAcceptedIsTrue(sender, receiver) ||
                     buddyRepository.existsBySenderAndReceiverAndAcceptedIsTrue(receiver, sender))
@@ -50,18 +53,18 @@ public class BuddyService {
             long senderId = buddyRequestDto.getSenderId();
             long receiverId = buddyRequestDto.getReceiverId();
 
-            User sender = userService.findById(senderId).orElseThrow(() ->
-                    new ClippedException(String.format("Sender with id: %d does not exist!", senderId)));
-            User receiver = userService.findById(receiverId).orElseThrow(() ->
-                    new ClippedException(String.format("Receiver with id: %d does not exist!", receiverId)));
+            User sender = userService.findById(senderId)
+                    .orElseThrow(() -> new ClippedException(String.format("Sender with id: %d does not exist!", senderId)));
+            User receiver = userService.findById(receiverId)
+                    .orElseThrow(() -> new ClippedException(String.format("Receiver with id: %d does not exist!", receiverId)));
 
 
             if (buddyRepository.existsBySenderAndReceiverAndAcceptedIsTrue(sender, receiver) ||
                     buddyRepository.existsBySenderAndReceiverAndAcceptedIsTrue(receiver, sender))
                 throw new ClippedException("Already buddies!");
 
-            Buddy buddy = buddyRepository.findBySenderAndReceiverAndAcceptedIsNull(sender, receiver).orElseThrow(() ->
-                    new ClippedException("Buddy request does not exist!"));
+            Buddy buddy = buddyRepository.findBySenderAndReceiverAndAcceptedIsNull(sender, receiver)
+                    .orElseThrow(() -> new ClippedException("Buddy request does not exist!"));
 
             buddy.setAccepted(true);
             buddyRepository.save(buddy);
@@ -76,17 +79,17 @@ public class BuddyService {
             long senderId = buddyRequestDto.getSenderId();
             long receiverId = buddyRequestDto.getReceiverId();
 
-            User sender = userService.findById(senderId).orElseThrow(() ->
-                    new ClippedException(String.format("Sender with id: %d does not exist!", senderId)));
-            User receiver = userService.findById(receiverId).orElseThrow(() ->
-                    new ClippedException(String.format("Receiver with id: %d does not exist!", receiverId)));
+            User sender = userService.findById(senderId)
+                    .orElseThrow(() -> new ClippedException(String.format("Sender with id: %d does not exist!", senderId)));
+            User receiver = userService.findById(receiverId)
+                    .orElseThrow(() -> new ClippedException(String.format("Receiver with id: %d does not exist!", receiverId)));
 
             if (buddyRepository.existsBySenderAndReceiverAndAcceptedIsTrue(sender, receiver) ||
                     buddyRepository.existsBySenderAndReceiverAndAcceptedIsTrue(receiver, sender))
                 throw new ClippedException("Already buddies!");
 
-            Buddy buddy = buddyRepository.findBySenderAndReceiverAndAcceptedIsNull(sender, receiver).orElseThrow(() ->
-                    new ClippedException("Buddy request does not exist!"));
+            Buddy buddy = buddyRepository.findBySenderAndReceiverAndAcceptedIsNull(sender, receiver)
+                    .orElseThrow(() -> new ClippedException("Buddy request does not exist!"));
 
             buddy.setAccepted(false);
             buddyRepository.save(buddy);
@@ -101,10 +104,10 @@ public class BuddyService {
             long senderId = buddyRequestDto.getSenderId();
             long receiverId = buddyRequestDto.getReceiverId();
 
-            User sender = userService.findById(senderId).orElseThrow(() ->
-                    new ClippedException(String.format("Sender with id: %d does not exist!", senderId)));
-            User receiver = userService.findById(receiverId).orElseThrow(() ->
-                    new ClippedException(String.format("Receiver with id: %d does not exist!", receiverId)));
+            User sender = userService.findById(senderId)
+                    .orElseThrow(() -> new ClippedException(String.format("Sender with id: %d does not exist!", senderId)));
+            User receiver = userService.findById(receiverId)
+                    .orElseThrow(() -> new ClippedException(String.format("Receiver with id: %d does not exist!", receiverId)));
 
             Optional<Buddy> senderToReceiverBuddy = buddyRepository.findBySenderAndReceiverAndAcceptedIsTrue(sender, receiver);
             Optional<Buddy> receiverToSenderBuddy = buddyRepository.findBySenderAndReceiverAndAcceptedIsTrue(receiver, sender);
@@ -119,6 +122,19 @@ public class BuddyService {
         } catch (ClippedException e) {
             throw new ClippedException(String.format("Remove buddy from sender with id: %d to receiver with id: %d failed due to %s",
                     buddyRequestDto.getSenderId(), buddyRequestDto.getReceiverId(), e.getMessage()), e);
+        }
+    }
+
+    public Set<BuddyDto> getPendingBuddyRequests(long userId) throws ClippedException {
+        try {
+            User user = userService.findById(userId)
+                    .orElseThrow(() -> new ClippedException(String.format("User with id: %d does not exist!", userId)));
+
+            // TODO: Use a linked hash set maybe or order the buddy requests by created date time descending
+            return BuddyMapper.INSTANCE.mapToDtos(buddyRepository.findByReceiverAndAcceptedIsNull(user));
+        } catch (ClippedException e) {
+            throw new ClippedException(String.format("Get pending buddy requests for user with id: %d failed due to %s",
+                    userId, e.getMessage()), e);
         }
     }
 
