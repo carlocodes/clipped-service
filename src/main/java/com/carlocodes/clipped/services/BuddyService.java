@@ -28,6 +28,9 @@ public class BuddyService {
             long senderId = buddyRequestDto.getSenderId();
             long receiverId = buddyRequestDto.getReceiverId();
 
+            if (senderId == receiverId)
+                throw new ClippedException("User cannot send buddy request to themselves!");
+
             User sender = userService.findById(senderId)
                     .orElseThrow(() -> new ClippedException(String.format("Sender with id: %d does not exist!", senderId)));
             User receiver = userService.findById(receiverId)
