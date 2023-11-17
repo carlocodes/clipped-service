@@ -14,4 +14,6 @@ public interface BuddyRepository extends JpaRepository<Buddy, Long> {
     boolean existsBySenderAndReceiverAndAcceptedIsNull(User sender, User receiver);
 
     Optional<Buddy> findBySenderAndReceiverAndAcceptedIsNull(User sender, User receiver);
+
+    Optional<Buddy> findBySenderAndReceiverAndAcceptedIsTrue(User sender, User receiver);
 }
