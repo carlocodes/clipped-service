@@ -5,6 +5,7 @@ import com.carlocodes.clipped.exceptions.ClippedException;
 import com.carlocodes.clipped.services.BuddyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,5 +23,11 @@ public class BuddyController {
     public ResponseEntity<String> sendBuddyRequest(@RequestBody BuddyRequestDto buddyRequestDto) throws ClippedException {
         buddyService.sendBuddyRequest(buddyRequestDto);
         return ResponseEntity.ok("Buddy request sent!");
+    }
+
+    @PutMapping("/accept-buddy-request")
+    public ResponseEntity<String> acceptBuddyRequest(@RequestBody BuddyRequestDto buddyRequestDto) throws ClippedException {
+        buddyService.acceptBuddyRequest(buddyRequestDto);
+        return ResponseEntity.ok("Buddy request accepted!");
     }
 }
