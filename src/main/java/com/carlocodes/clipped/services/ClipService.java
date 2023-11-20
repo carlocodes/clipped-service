@@ -42,10 +42,13 @@ public class ClipService {
             Game game = gameService.findById(gameId)
                     .orElseThrow(() -> new ClippedException(String.format("Game with id: %d does not exist!", gameId)));
 
-            // TODO: Maybe add a check to see if the user is "watching" the game he/she is posting to
-            // Throw an exception if he/she is not "watching" the game he/she is posting to
             if (Objects.isNull(clipUrl) || clipUrl.isBlank())
                 throw new ClippedException("Clip url should not be null/empty/blank!");
+
+            Set<Game> watchedGames = user.getGames();
+
+            if (!watchedGames.contains(game))
+                throw new ClippedException("User cannot post a clip to a game they are not watching!");
 
             return ClipMapper.INSTANCE.mapToDto(saveClip(clipDto, user, game));
         } catch (ClippedException e) {
