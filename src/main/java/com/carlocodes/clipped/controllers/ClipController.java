@@ -26,9 +26,9 @@ public class ClipController {
         this.clipService = clipService;
     }
 
-    @PostMapping("/create-clip")
-    public ResponseEntity<ClipDto> createClip(@RequestBody ClipDto clipDto) throws ClippedException {
-        return ResponseEntity.ok(clipService.createClip(clipDto));
+    @PostMapping("/post-clip")
+    public ResponseEntity<ClipDto> postClip(@RequestBody ClipDto clipDto) throws ClippedException {
+        return ResponseEntity.ok(clipService.postClip(clipDto));
     }
 
     @PutMapping("/edit-clip")
