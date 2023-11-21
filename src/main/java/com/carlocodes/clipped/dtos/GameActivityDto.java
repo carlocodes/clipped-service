@@ -2,14 +2,14 @@ package com.carlocodes.clipped.dtos;
 
 // TODO: Revisit class name to be more meaningful and appropriate
 public class GameActivityDto {
-    private Long userId;
+    private long userId;
     private Integer gameId;
 
-    public Long getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

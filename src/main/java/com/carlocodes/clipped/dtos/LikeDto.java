@@ -2,22 +2,22 @@ package com.carlocodes.clipped.dtos;
 
 // TODO: Revisit the name of this class
 public class LikeDto {
-    private Long clipId;
-    private Long userId;
+    private long clipId;
+    private long userId;
 
-    public Long getClipId() {
+    public long getClipId() {
         return clipId;
     }
 
-    public void setClipId(Long clipId) {
+    public void setClipId(long clipId) {
         this.clipId = clipId;
     }
 
-    public Long getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
