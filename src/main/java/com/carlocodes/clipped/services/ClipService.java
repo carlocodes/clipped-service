@@ -30,7 +30,7 @@ public class ClipService {
         this.gameService = gameService;
     }
 
-    public ClipDto createClip(ClipDto clipDto) throws ClippedException {
+    public ClipDto postClip(ClipDto clipDto) throws ClippedException {
         try {
             long userId = clipDto.getUser().getId();
             int gameId = clipDto.getGame().getId();
@@ -48,12 +48,12 @@ public class ClipService {
             Set<Game> watchedGames = user.getGames();
 
             if (!watchedGames.contains(game))
-                throw new ClippedException("User cannot post a clip to a game they are not watching!");
+                throw new ClippedException(String.format("User with id: %d cannot post a clip to a game they are not watching!", userId));
 
             return ClipMapper.INSTANCE.mapToDto(saveClip(clipDto, user, game));
         } catch (ClippedException e) {
-            throw new ClippedException(String.format("Create clip for user with id: %d failed due to %s",
-                    clipDto.getUser().getId(), e.getMessage()), e);
+            throw new ClippedException(String.format("Post clip for user with id: %d to game with id: %d failed due to %s",
+                    clipDto.getUser().getId(), clipDto.getGame().getId(), e.getMessage()), e);
         }
     }
 
@@ -70,8 +70,8 @@ public class ClipService {
 
             return ClipMapper.INSTANCE.mapToDto(editClip(clip, clipDto));
         } catch (ClippedException e) {
-            throw new ClippedException(String.format("Edit clip with id: %d failed due to %s",
-                    clipDto.getId(), e.getMessage()), e);
+            throw new ClippedException(String.format("Edit clip with id: %d for user with id: %d failed due to %s",
+                    clipDto.getId(), clipDto.getUser().getId(), e.getMessage()), e);
         }
     }
 
@@ -88,8 +88,8 @@ public class ClipService {
 
             clipRepository.delete(clip);
         } catch (ClippedException e) {
-            throw new ClippedException(String.format("Delete clip with id: %d failed due to %s",
-                    clipDto.getId(), e.getMessage()), e);
+            throw new ClippedException(String.format("Delete clip with id: %d for user with id: %d failed due to %s",
+                    clipDto.getId(), clipDto.getUser().getId(), e.getMessage()), e);
         }
     }
 

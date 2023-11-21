@@ -29,7 +29,7 @@ public class BuddyService {
             long receiverId = buddyRequestDto.getReceiverId();
 
             if (senderId == receiverId)
-                throw new ClippedException("User cannot send buddy request to themselves!");
+                throw new ClippedException(String.format("User with id: %d cannot send buddy request to themselves!", senderId));
 
             User sender = userService.findById(senderId)
                     .orElseThrow(() -> new ClippedException(String.format("Sender with id: %d does not exist!", senderId)));
@@ -38,7 +38,7 @@ public class BuddyService {
 
             if (buddyRepository.existsBySenderAndReceiverAndAcceptedIsTrue(sender, receiver) ||
                     buddyRepository.existsBySenderAndReceiverAndAcceptedIsTrue(receiver, sender))
-                throw new ClippedException("Already buddies!");
+                throw new ClippedException("Users are already buddies!");
 
             if (buddyRepository.existsBySenderAndReceiverAndAcceptedIsNull(sender, receiver) ||
                     buddyRepository.existsBySenderAndReceiverAndAcceptedIsNull(receiver, sender))
@@ -64,7 +64,7 @@ public class BuddyService {
 
             if (buddyRepository.existsBySenderAndReceiverAndAcceptedIsTrue(sender, receiver) ||
                     buddyRepository.existsBySenderAndReceiverAndAcceptedIsTrue(receiver, sender))
-                throw new ClippedException("Already buddies!");
+                throw new ClippedException("Users are already buddies!");
 
             Buddy buddy = buddyRepository.findBySenderAndReceiverAndAcceptedIsNull(sender, receiver)
                     .orElseThrow(() -> new ClippedException("Buddy request does not exist!"));
@@ -89,7 +89,7 @@ public class BuddyService {
 
             if (buddyRepository.existsBySenderAndReceiverAndAcceptedIsTrue(sender, receiver) ||
                     buddyRepository.existsBySenderAndReceiverAndAcceptedIsTrue(receiver, sender))
-                throw new ClippedException("Already buddies!");
+                throw new ClippedException("Users are already buddies!");
 
             Buddy buddy = buddyRepository.findBySenderAndReceiverAndAcceptedIsNull(sender, receiver)
                     .orElseThrow(() -> new ClippedException("Buddy request does not exist!"));
