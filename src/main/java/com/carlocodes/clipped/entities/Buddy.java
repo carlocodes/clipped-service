@@ -22,7 +22,7 @@ public class Buddy {
     @Column(nullable = true)
     private Boolean accepted;
     private LocalDateTime createdDateTime;
-    private LocalDateTime acceptedDateTime;
+    private LocalDateTime updatedDateTime;
 
     @PrePersist
     public void prePersist() {
@@ -31,7 +31,7 @@ public class Buddy {
 
     @PreUpdate
     public void preUpdate() {
-        this.acceptedDateTime = LocalDateTime.now();
+        this.updatedDateTime = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -74,12 +74,12 @@ public class Buddy {
         this.createdDateTime = createdDateTime;
     }
 
-    public LocalDateTime getAcceptedDateTime() {
-        return acceptedDateTime;
+    public LocalDateTime getUpdatedDateTime() {
+        return updatedDateTime;
     }
 
-    public void setAcceptedDateTime(LocalDateTime acceptedDateTime) {
-        this.acceptedDateTime = acceptedDateTime;
+    public void setUpdatedDateTime(LocalDateTime updatedDateTime) {
+        this.updatedDateTime = updatedDateTime;
     }
 
     @Override
@@ -90,7 +90,7 @@ public class Buddy {
                 ", receiver=" + receiver +
                 ", accepted=" + accepted +
                 ", createdDateTime=" + createdDateTime +
-                ", acceptedDateTime=" + acceptedDateTime +
+                ", updatedDateTime=" + updatedDateTime +
                 '}';
     }
 }
