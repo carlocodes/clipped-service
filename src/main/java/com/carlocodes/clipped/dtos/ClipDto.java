@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 public class ClipDto {
-    private Long id;
+    private long id;
     private String clipUrl;
     private String message;
     private UserDto user;
@@ -13,11 +13,11 @@ public class ClipDto {
     private LocalDateTime createdDateTime;
     private LocalDateTime updatedDateTime;
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

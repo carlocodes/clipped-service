@@ -3,15 +3,15 @@ package com.carlocodes.clipped.dtos;
 import java.time.LocalDateTime;
 
 public class GameDto {
-    private Integer id;
+    private int id;
     private String name;
     private LocalDateTime createdDateTime;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
