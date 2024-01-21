@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -32,11 +33,15 @@ public class UserServiceTest {
 
         when(userRepository.findById(id)).thenReturn(Optional.of(user));
 
-        Optional<User> result = userService.findById(id);
+        Optional<User> optionalResult = userService.findById(id);
 
-        assertEquals(Optional.of(user), result);
-        assertEquals(user.getId(), result.get().getId());
-        assertEquals(user.getUsername(), result.get().getUsername());
+        assertTrue(optionalResult.isPresent());
+
+        User result = optionalResult.get();
+
+        assertEquals(user, result);
+        assertEquals(user.getId(), result.getId());
+        assertEquals(user.getUsername(), result.getUsername());
 
         verify(userRepository, times(1)).findById(id);
     }
