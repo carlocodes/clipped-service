@@ -159,8 +159,8 @@ public class ClipService {
     private Clip saveClip(ClipDto clipDto, User user, Game game) {
         Clip clip = new Clip();
 
-        clip.setClipUrl(clipDto.getClipUrl());
-        clip.setMessage(clipDto.getMessage());
+        clip.setUrl(clipDto.getClipUrl());
+        clip.setDescription(clipDto.getMessage());
         clip.setUser(user);
         clip.setGame(game);
 
@@ -168,7 +168,7 @@ public class ClipService {
     }
 
     private Clip editClip(Clip clip, ClipDto clipDto) {
-        clip.setMessage(clipDto.getMessage());
+        clip.setDescription(clipDto.getMessage());
 
         return clipRepository.save(clip);
     }
