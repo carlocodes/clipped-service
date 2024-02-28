@@ -4,37 +4,46 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 public class ClipDto {
-    private long id;
-    private String clipUrl;
-    private String message;
+    private Long id;
+    private String title;
+    private String description;
+    private String url;
     private UserDto user;
     private GameDto game;
     private Set<UserDto> likes;
     private LocalDateTime createdDateTime;
     private LocalDateTime updatedDateTime;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getClipUrl() {
-        return clipUrl;
+    public String getTitle() {
+        return title;
     }
 
-    public void setClipUrl(String clipUrl) {
-        this.clipUrl = clipUrl;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getMessage() {
-        return message;
+    public String getDescription() {
+        return description;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public UserDto getUser() {
@@ -81,8 +90,9 @@ public class ClipDto {
     public String toString() {
         return "ClipDto{" +
                 "id=" + id +
-                ", clipUrl='" + clipUrl + '\'' +
-                ", message='" + message + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", url='" + url + '\'' +
                 ", user=" + user +
                 ", game=" + game +
                 ", likes=" + likes +
