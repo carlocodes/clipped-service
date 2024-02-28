@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8080
   servlet:
     context-path: /clipped
 
@@ -13,9 +13,3 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
