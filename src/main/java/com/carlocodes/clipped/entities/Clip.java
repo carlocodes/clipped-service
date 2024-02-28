@@ -18,8 +18,9 @@ public class Clip {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String clipUrl;
-    private String message;
+    private String title;
+    private String description;
+    private String url;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -52,20 +53,28 @@ public class Clip {
         this.id = id;
     }
 
-    public String getClipUrl() {
-        return clipUrl;
+    public String getTitle() {
+        return title;
     }
 
-    public void setClipUrl(String clipUrl) {
-        this.clipUrl = clipUrl;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getMessage() {
-        return message;
+    public String getDescription() {
+        return description;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public User getUser() {
@@ -112,8 +121,9 @@ public class Clip {
     public String toString() {
         return "Clip{" +
                 "id=" + id +
-                ", clipUrl='" + clipUrl + '\'' +
-                ", message='" + message + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", url='" + url + '\'' +
                 ", user=" + user +
                 ", game=" + game +
                 ", likes=" + likes +
