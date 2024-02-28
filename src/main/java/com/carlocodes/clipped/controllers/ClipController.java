@@ -2,6 +2,7 @@ package com.carlocodes.clipped.controllers;
 
 import com.carlocodes.clipped.dtos.ClipDto;
 import com.carlocodes.clipped.dtos.LikeDto;
+import com.carlocodes.clipped.dtos.PostClipRequestDto;
 import com.carlocodes.clipped.exceptions.ClippedException;
 import com.carlocodes.clipped.services.ClipService;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +28,8 @@ public class ClipController {
     }
 
     @PostMapping("/post-clip")
-    public ResponseEntity<ClipDto> postClip(@RequestBody ClipDto clipDto) throws ClippedException {
-        return ResponseEntity.ok(clipService.postClip(clipDto));
+    public ResponseEntity<ClipDto> postClip(@RequestBody PostClipRequestDto postClipRequestDto) throws ClippedException {
+        return ResponseEntity.ok(clipService.postClip(postClipRequestDto));
     }
 
     @PutMapping("/edit-clip")

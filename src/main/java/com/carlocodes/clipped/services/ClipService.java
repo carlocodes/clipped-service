@@ -2,6 +2,7 @@ package com.carlocodes.clipped.services;
 
 import com.carlocodes.clipped.dtos.ClipDto;
 import com.carlocodes.clipped.dtos.LikeDto;
+import com.carlocodes.clipped.dtos.PostClipRequestDto;
 import com.carlocodes.clipped.entities.Clip;
 import com.carlocodes.clipped.entities.Game;
 import com.carlocodes.clipped.entities.User;
@@ -30,11 +31,11 @@ public class ClipService {
         this.gameService = gameService;
     }
 
-    public ClipDto postClip(ClipDto clipDto) throws ClippedException {
+    public ClipDto postClip(PostClipRequestDto postClipRequestDto) throws ClippedException {
         try {
-            long userId = clipDto.getUser().getId();
-            int gameId = clipDto.getGame().getId();
-            String clipUrl = clipDto.getClipUrl();
+            long userId = postClipRequestDto.getUserId();
+            int gameId = postClipRequestDto.getGameId();
+            String url = postClipRequestDto.getUrl();
 
             User user = userService.findById(userId)
                     .orElseThrow(() -> new ClippedException(String.format("User with id: %d does not exist!", userId)));
@@ -42,18 +43,18 @@ public class ClipService {
             Game game = gameService.findById(gameId)
                     .orElseThrow(() -> new ClippedException(String.format("Game with id: %d does not exist!", gameId)));
 
-            if (Objects.isNull(clipUrl) || clipUrl.isBlank())
-                throw new ClippedException("Clip url should not be null/empty/blank!");
+            if (Objects.isNull(url) || url.isBlank())
+                throw new ClippedException("URL should not be null/empty/blank!");
 
             Set<Game> watchedGames = user.getGames();
 
             if (!watchedGames.contains(game))
                 throw new ClippedException(String.format("User with id: %d cannot post a clip to a game they are not watching!", userId));
 
-            return ClipMapper.INSTANCE.mapToDto(saveClip(clipDto, user, game));
+            return ClipMapper.INSTANCE.mapToDto(saveClip(postClipRequestDto, user, game));
         } catch (ClippedException e) {
             throw new ClippedException(String.format("Post clip for user with id: %d to game with id: %d failed due to %s",
-                    clipDto.getUser().getId(), clipDto.getGame().getId(), e.getMessage()), e);
+                    postClipRequestDto.getUserId(), postClipRequestDto.getGameId(), e.getMessage()), e);
         }
     }
 
@@ -156,19 +157,20 @@ public class ClipService {
         }
     }
 
-    private Clip saveClip(ClipDto clipDto, User user, Game game) {
+    private Clip saveClip(PostClipRequestDto postClipRequestDto, User user, Game game) {
         Clip clip = new Clip();
 
-        clip.setUrl(clipDto.getClipUrl());
-        clip.setDescription(clipDto.getMessage());
         clip.setUser(user);
         clip.setGame(game);
+        clip.setTitle(postClipRequestDto.getTitle());
+        clip.setDescription(postClipRequestDto.getDescription());
+        clip.setUrl(postClipRequestDto.getUrl());
 
         return clipRepository.save(clip);
     }
 
     private Clip editClip(Clip clip, ClipDto clipDto) {
-        clip.setDescription(clipDto.getMessage());
+        clip.setDescription(clipDto.getDescription());
 
         return clipRepository.save(clip);
     }
